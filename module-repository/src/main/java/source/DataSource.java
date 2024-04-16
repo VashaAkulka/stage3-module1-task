@@ -1,5 +1,7 @@
 package source;
 
+import error.ErrorCode;
+import error.MyException;
 import lombok.Getter;
 import models.Author;
 import models.News;
@@ -10,11 +12,11 @@ import java.util.List;
 
 @Getter
 public class DataSource {
-    private final String pathNews = "resources/news.txt";
-    private final String pathAuthor = "resources/author.txt";
+    private final String pathNews = "module-repository/src/main/resources/news.bin";
+    private final String pathAuthor = "module-repository/src/main/resources/author.bin";
 
-    List<News> newsList = new ArrayList<>();
-    List<Author> authorList = new ArrayList<>();
+    private final List<News> newsList = new ArrayList<>();
+    private final List<Author> authorList = new ArrayList<>();
 
     static private DataSource instance = null;
 
@@ -25,27 +27,47 @@ public class DataSource {
     static public DataSource getInstance() {
         if (instance == null) {
             instance = new DataSource();
-            instance.readAuthors();
             instance.readNews();
+            instance.readAuthors();
         }
         return instance;
     }
 
     private void readNews() {
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(pathNews))) {
-            while (ois.available() > 0) {
-                newsList.add((News) ois.readObject());
+
+        try(FileInputStream fis = new FileInputStream(pathNews)) {
+            if (fis.available() > 0) {
+                ObjectInputStream ois = new ObjectInputStream(fis);
+
+                while(true) {
+                    try {
+                        newsList.add((News) ois.readObject());
+                    } catch (EOFException e) {
+                        break;
+                    }
+                }
+                ois.close();
             }
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(new MyException(ErrorCode.NO_SUCH_FILE.getErrorData()));
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
     private void readAuthors() {
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(pathAuthor))) {
-            while (ois.available() > 0) {
-                authorList.add((Author) ois.readObject());
+
+        try (FileInputStream fis = new FileInputStream(pathAuthor)) {
+            if (fis.available() > 0) {
+                ObjectInputStream ois = new ObjectInputStream(fis);
+
+                while (ois.available() > 0) {
+                    authorList.add((Author) ois.readObject());
+                }
+                ois.close();
             }
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(new MyException(ErrorCode.NO_SUCH_FILE.getErrorData()));
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -54,6 +76,8 @@ public class DataSource {
     private void writeNews() {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(pathNews))) {
             for (News news : newsList) oos.writeObject(news);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(new MyException(ErrorCode.NO_SUCH_FILE.getErrorData()));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -62,6 +86,8 @@ public class DataSource {
     private void writeAuthors() {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(pathAuthor))) {
             for (Author author : authorList) oos.writeObject(author);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(new MyException(ErrorCode.NO_SUCH_FILE.getErrorData()));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
