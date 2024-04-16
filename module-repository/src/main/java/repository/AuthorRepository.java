@@ -14,6 +14,7 @@ public class AuthorRepository implements GeneralRepository<Author> {
     @Override
     public void save(Author author) {
         dataSource.getAuthorList().add(author);
+        dataSource.writeAuthors();
     }
 
     @Override
@@ -33,12 +34,15 @@ public class AuthorRepository implements GeneralRepository<Author> {
     public Author update(Author author, Long id) throws MyException {
         Author returnAuthor = getById(id);
         returnAuthor.setName(author.getName());
+        dataSource.writeAuthors();
 
         return returnAuthor;
     }
 
     @Override
     public boolean delete(Long id) {
-        return dataSource.getAuthorList().removeIf(author -> author.getId().equals(id));
+        boolean result = dataSource.getAuthorList().removeIf(author -> author.getId().equals(id));
+        if (result) dataSource.writeAuthors();
+        return result;
     }
 }

@@ -73,7 +73,7 @@ public class DataSource {
         }
     }
 
-    private void writeNews() {
+    public void writeNews() {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(pathNews))) {
             for (News news : newsList) oos.writeObject(news);
         } catch (FileNotFoundException e) {
@@ -83,7 +83,7 @@ public class DataSource {
         }
     }
 
-    private void writeAuthors() {
+    public void writeAuthors() {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(pathAuthor))) {
             for (Author author : authorList) oos.writeObject(author);
         } catch (FileNotFoundException e) {
@@ -91,10 +91,5 @@ public class DataSource {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public void saveAllData() {
-        writeNews();
-        writeAuthors();
     }
 }

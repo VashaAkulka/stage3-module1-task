@@ -16,26 +16,21 @@ public class NewsService implements GeneralService<NewsDTO> {
     GeneralRepository<News> repository = new NewsRepository();
 
     @Override
-    public NewsDTO create(NewsDTO newsDTO) {
+    public NewsDTO create(NewsDTO newsDTO) throws MyException {
         GeneralValidation<NewsDTO> validation = new ValidationNews();
-        try {
-            validation.validate(newsDTO);
-            News news = new News();
-            news.setTitle(newsDTO.getTitle());
-            news.setContent(newsDTO.getContent());
-            news.setCreateDate(LocalDateTime.now());
-            news.setLastUpdateDate(LocalDateTime.now());
-            news.setAuthorId(newsDTO.getAuthorId());
+        validation.validate(newsDTO);
+        News news = new News();
+        news.setTitle(newsDTO.getTitle());
+        news.setContent(newsDTO.getContent());
+        news.setCreateDate(LocalDateTime.now());
+        news.setLastUpdateDate(LocalDateTime.now());
+        news.setAuthorId(newsDTO.getAuthorId());
 
-            if (repository.getAll().isEmpty()) news.setId(1L);
-            else news.setId(repository.getAll().get(repository.getAll().size() - 1).getId() + 1);
+        if (repository.getAll().isEmpty()) news.setId(1L);
+        else news.setId(repository.getAll().get(repository.getAll().size() - 1).getId() + 1);
 
-            repository.save(news);
-            return NewsMapper.INSTANCE.newsToNewsDto(news);
-        } catch (MyException e) {
-            System.out.println(e.getMessage());
-            return null;
-        }
+        repository.save(news);
+        return NewsMapper.INSTANCE.newsToNewsDto(news);
     }
 
     @Override
@@ -44,31 +39,21 @@ public class NewsService implements GeneralService<NewsDTO> {
     }
 
     @Override
-    public NewsDTO getById(Long id) {
-        try {
-            return NewsMapper.INSTANCE.newsToNewsDto(repository.getById(id));
-        } catch (MyException e) {
-            System.out.println(e.getMessage());
-            return null;
-        }
+    public NewsDTO getById(Long id) throws MyException {
+        return NewsMapper.INSTANCE.newsToNewsDto(repository.getById(id));
     }
 
     @Override
-    public NewsDTO update(NewsDTO newsDTO, Long id) {
+    public NewsDTO update(NewsDTO newsDTO, Long id) throws MyException {
         GeneralValidation<NewsDTO> validation = new ValidationNews();
-        try {
-            validation.validate(newsDTO);
-            News news = new News();
-            news.setTitle(newsDTO.getTitle());
-            news.setContent(newsDTO.getContent());
-            news.setAuthorId(newsDTO.getAuthorId());
-            news.setLastUpdateDate(LocalDateTime.now());
+        validation.validate(newsDTO);
+        News news = new News();
+        news.setTitle(newsDTO.getTitle());
+        news.setContent(newsDTO.getContent());
+        news.setAuthorId(newsDTO.getAuthorId());
+        news.setLastUpdateDate(LocalDateTime.now());
 
-            return NewsMapper.INSTANCE.newsToNewsDto(repository.update(news, id));
-        } catch (MyException e) {
-            System.out.println(e.getMessage());
-            return null;
-        }
+        return NewsMapper.INSTANCE.newsToNewsDto(repository.update(news, id));
     }
 
     @Override

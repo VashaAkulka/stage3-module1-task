@@ -14,6 +14,7 @@ public class NewsRepository implements GeneralRepository<News> {
     @Override
     public void save(News news) {
         dataSource.getNewsList().add(news);
+        dataSource.writeNews();
     }
 
     @Override
@@ -37,12 +38,15 @@ public class NewsRepository implements GeneralRepository<News> {
         returnNews.setContent(news.getContent());
         returnNews.setAuthorId(news.getAuthorId());
         returnNews.setLastUpdateDate(news.getLastUpdateDate());
+        dataSource.writeNews();
 
         return returnNews;
     }
 
     @Override
     public boolean delete(Long id) {
-        return dataSource.getNewsList().removeIf(news -> news.getId().equals(id));
+        boolean result = dataSource.getNewsList().removeIf(news -> news.getId().equals(id));
+        if (result) dataSource.writeNews();
+        return result;
     }
 }
