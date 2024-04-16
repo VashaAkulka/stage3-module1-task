@@ -2,9 +2,9 @@ package com.mjc.school.repository.source;
 
 import com.mjc.school.repository.error.ErrorCode;
 import com.mjc.school.repository.error.MyException;
-import com.mjc.school.repository.models.Author;
+import com.mjc.school.repository.models.AuthorModel;
 import lombok.Getter;
-import com.mjc.school.repository.models.News;
+import com.mjc.school.repository.models.NewsModel;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -15,8 +15,8 @@ public class DataSource {
     private final String pathNews = "module-repository/src/main/resources/news.bin";
     private final String pathAuthor = "module-repository/src/main/resources/author.bin";
 
-    private final List<News> newsList = new ArrayList<>();
-    private final List<Author> authorList = new ArrayList<>();
+    private final List<NewsModel> newsList = new ArrayList<>();
+    private final List<AuthorModel> authorList = new ArrayList<>();
 
     static private DataSource instance = null;
 
@@ -41,7 +41,7 @@ public class DataSource {
 
                 while(true) {
                     try {
-                        newsList.add((News) ois.readObject());
+                        newsList.add((NewsModel) ois.readObject());
                     } catch (EOFException e) {
                         break;
                     }
@@ -63,7 +63,7 @@ public class DataSource {
 
                 while(true) {
                     try {
-                        authorList.add((Author) ois.readObject());
+                        authorList.add((AuthorModel) ois.readObject());
                     } catch (EOFException e) {
                         break;
                     }
@@ -79,7 +79,7 @@ public class DataSource {
 
     public void writeNews() {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(pathNews))) {
-            for (News news : newsList) oos.writeObject(news);
+            for (NewsModel news : newsList) oos.writeObject(news);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(new MyException(ErrorCode.NO_SUCH_FILE.getErrorData()));
         } catch (IOException e) {
@@ -89,7 +89,7 @@ public class DataSource {
 
     public void writeAuthors() {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(pathAuthor))) {
-            for (Author author : authorList) oos.writeObject(author);
+            for (AuthorModel author : authorList) oos.writeObject(author);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(new MyException(ErrorCode.NO_SUCH_FILE.getErrorData()));
         } catch (IOException e) {

@@ -2,28 +2,28 @@ package com.mjc.school.repository.impl;
 
 import com.mjc.school.repository.error.ErrorCode;
 import com.mjc.school.repository.error.MyException;
-import com.mjc.school.repository.models.News;
+import com.mjc.school.repository.models.NewsModel;
 import com.mjc.school.repository.GeneralRepository;
 import com.mjc.school.repository.source.DataSource;
 
 import java.util.List;
 
-public class NewsRepository implements GeneralRepository<News> {
+public class NewsRepository implements GeneralRepository<NewsModel> {
     private final DataSource dataSource = DataSource.getInstance();
 
     @Override
-    public void save(News news) {
+    public void create(NewsModel news) {
         dataSource.getNewsList().add(news);
         dataSource.writeNews();
     }
 
     @Override
-    public List<News> getAll() {
+    public List<NewsModel> readAll() {
         return dataSource.getNewsList();
     }
 
     @Override
-    public News getById(Long id) throws MyException {
+    public NewsModel readById(Long id) throws MyException {
         return dataSource.getNewsList().stream()
                 .filter(n -> n.getId().equals(id))
                 .findFirst()
@@ -31,8 +31,8 @@ public class NewsRepository implements GeneralRepository<News> {
     }
 
     @Override
-    public News update(News news, Long id) throws MyException {
-        News returnNews = getById(id);
+    public NewsModel update(NewsModel news, Long id) throws MyException {
+        NewsModel returnNews = readById(id);
 
         returnNews.setTitle(news.getTitle());
         returnNews.setContent(news.getContent());
@@ -44,7 +44,7 @@ public class NewsRepository implements GeneralRepository<News> {
     }
 
     @Override
-    public boolean delete(Long id) {
+    public Boolean delete(Long id) {
         boolean result = dataSource.getNewsList().removeIf(news -> news.getId().equals(id));
         if (result) dataSource.writeNews();
         return result;

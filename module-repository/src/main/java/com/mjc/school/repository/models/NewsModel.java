@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
-public class News implements Serializable {
+public class NewsModel implements Serializable {
     Long id;
     String title;
     String content;

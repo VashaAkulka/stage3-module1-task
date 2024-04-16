@@ -1,12 +1,12 @@
 package com.mjc.school.service.service;
 
+import com.mjc.school.repository.models.AuthorModel;
 import com.mjc.school.service.GeneralService;
 import com.mjc.school.service.dto.AuthorDTO;
 import com.mjc.school.service.mapper.AuthorMapper;
 import com.mjc.school.service.validate.GeneralValidation;
 import com.mjc.school.service.validate.ValidationAuthor;
 import com.mjc.school.repository.error.MyException;
-import com.mjc.school.repository.models.Author;
 import com.mjc.school.repository.impl.AuthorRepository;
 import com.mjc.school.repository.GeneralRepository;
 
@@ -14,20 +14,20 @@ import java.util.List;
 
 public class AuthorService implements GeneralService<AuthorDTO> {
 
-    GeneralRepository<Author> repository = new AuthorRepository();
+    GeneralRepository<AuthorModel> repository = new AuthorRepository();
 
     @Override
     public AuthorDTO create(AuthorDTO dto) {
         GeneralValidation<AuthorDTO> validation = new ValidationAuthor();
         try {
             validation.validate(dto);
-            Author author = new Author();
+            AuthorModel author = new AuthorModel();
             author.setName(dto.getName());
 
-            if (repository.getAll().isEmpty()) author.setId(1L);
-            else author.setId(repository.getAll().get(repository.getAll().size() - 1).getId() + 1);
+            if (repository.readAll().isEmpty()) author.setId(1L);
+            else author.setId(repository.readAll().get(repository.readAll().size() - 1).getId() + 1);
 
-            repository.save(author);
+            repository.create(author);
             return AuthorMapper.INSTANCE.authorToAuthorDto(author);
         } catch (MyException e) {
             System.out.println(e.getMessage());
@@ -37,13 +37,13 @@ public class AuthorService implements GeneralService<AuthorDTO> {
 
     @Override
     public List<AuthorDTO> getAll() {
-        return AuthorMapper.INSTANCE.authorListToAuthorDtoList(repository.getAll());
+        return AuthorMapper.INSTANCE.authorListToAuthorDtoList(repository.readAll());
     }
 
     @Override
     public AuthorDTO getById(Long id) {
         try {
-            return AuthorMapper.INSTANCE.authorToAuthorDto(repository.getById(id));
+            return AuthorMapper.INSTANCE.authorToAuthorDto(repository.readById(id));
         } catch (MyException e) {
             System.out.println(e.getMessage());
             return null;
@@ -56,7 +56,7 @@ public class AuthorService implements GeneralService<AuthorDTO> {
         try {
             validation.validate(dto);
 
-            Author author = new Author();
+            AuthorModel author = new AuthorModel();
             author.setName(dto.getName());
 
             return AuthorMapper.INSTANCE.authorToAuthorDto(repository.update(author, id));

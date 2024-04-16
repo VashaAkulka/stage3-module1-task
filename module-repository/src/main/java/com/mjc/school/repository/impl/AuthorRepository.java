@@ -2,29 +2,29 @@ package com.mjc.school.repository.impl;
 
 import com.mjc.school.repository.error.ErrorCode;
 import com.mjc.school.repository.error.MyException;
-import com.mjc.school.repository.models.Author;
+import com.mjc.school.repository.models.AuthorModel;
 import com.mjc.school.repository.GeneralRepository;
 import com.mjc.school.repository.source.DataSource;
 
 import java.util.List;
 
-public class AuthorRepository implements GeneralRepository<Author> {
+public class AuthorRepository implements GeneralRepository<AuthorModel> {
 
     private final DataSource dataSource = DataSource.getInstance();
 
     @Override
-    public void save(Author author) {
+    public void create(AuthorModel author) {
         dataSource.getAuthorList().add(author);
         dataSource.writeAuthors();
     }
 
     @Override
-    public List<Author> getAll() {
+    public List<AuthorModel> readAll() {
         return dataSource.getAuthorList();
     }
 
     @Override
-    public Author getById(Long id) throws MyException {
+    public AuthorModel readById(Long id) throws MyException {
         return dataSource.getAuthorList().stream()
                 .filter(n -> n.getId().equals(id))
                 .findFirst()
@@ -32,8 +32,8 @@ public class AuthorRepository implements GeneralRepository<Author> {
     }
 
     @Override
-    public Author update(Author author, Long id) throws MyException {
-        Author returnAuthor = getById(id);
+    public AuthorModel update(AuthorModel author, Long id) throws MyException {
+        AuthorModel returnAuthor = readById(id);
         returnAuthor.setName(author.getName());
         dataSource.writeAuthors();
 
@@ -41,7 +41,7 @@ public class AuthorRepository implements GeneralRepository<Author> {
     }
 
     @Override
-    public boolean delete(Long id) {
+    public Boolean delete(Long id) {
         boolean result = dataSource.getAuthorList().removeIf(author -> author.getId().equals(id));
         if (result) dataSource.writeAuthors();
         return result;
