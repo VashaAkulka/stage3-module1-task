@@ -62,9 +62,10 @@ public class App implements GeneralApp {
         NewsDTO newsDTO = new NewsDTO();
 
         System.out.print("TITLE: ");
-        newsDTO.setTitle(scanner.next());
+        scanner.nextLine();
+        newsDTO.setTitle(scanner.nextLine());
         System.out.print("CONTENT: ");
-        newsDTO.setContent(scanner.next());
+        newsDTO.setContent(scanner.nextLine());
         System.out.print("AUTHOR: ");
         newsDTO.setAuthorId((long)scanner.nextInt());
 
@@ -84,9 +85,10 @@ public class App implements GeneralApp {
         NewsDTO newsDTO = new NewsDTO();
 
         System.out.print("TITLE: ");
-        newsDTO.setTitle(scanner.next());
+        scanner.nextLine();
+        newsDTO.setTitle(scanner.nextLine());
         System.out.print("CONTENT: ");
-        newsDTO.setContent(scanner.next());
+        newsDTO.setContent(scanner.nextLine());
         System.out.print("AUTHOR: ");
         newsDTO.setAuthorId(scanner.nextLong());
         System.out.print("ID FOR UPDATE: ");
