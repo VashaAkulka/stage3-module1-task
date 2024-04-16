@@ -1,10 +1,11 @@
 package mapper;
 
-import dto.AuthorDTO;
+import com.mjc.school.service.dto.AuthorDTO;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.processing.Generated;
-import models.Author;
+import com.mjc.school.repository.models.Author;
+import com.mjc.school.service.mapper.AuthorMapper;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",

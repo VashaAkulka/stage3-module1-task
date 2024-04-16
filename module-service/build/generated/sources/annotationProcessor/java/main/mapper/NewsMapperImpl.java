@@ -1,10 +1,11 @@
 package mapper;
 
-import dto.NewsDTO;
+import com.mjc.school.service.dto.NewsDTO;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.processing.Generated;
-import models.News;
+import com.mjc.school.repository.models.News;
+import com.mjc.school.service.mapper.NewsMapper;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
