@@ -62,12 +62,12 @@ public class App implements GeneralApp{
 
         System.out.print("TITLE: ");
         newsDTO.setTitle(scanner.next());
-        System.out.print("CONTEXT: ");
+        System.out.print("CONTENT: ");
         newsDTO.setContent(scanner.next());
         System.out.print("AUTHOR: ");
         newsDTO.setAuthorId((long)scanner.nextInt());
 
-        newsService.create(newsDTO);
+        if (newsService.create(newsDTO) != null) System.out.println("CREATE SUCCESS");
     }
 
     private void addAuthor() {
@@ -76,7 +76,7 @@ public class App implements GeneralApp{
         System.out.print("NAME: ");
         authorDTO.setName(scanner.next());
 
-        newsService.create(authorDTO);
+        if (authorService.create(authorDTO) != null) System.out.println("CREATE SUCCESS");
     }
 
     private void editNews() {
@@ -84,14 +84,14 @@ public class App implements GeneralApp{
 
         System.out.print("TITLE: ");
         newsDTO.setTitle(scanner.next());
-        System.out.print("CONTEXT: ");
+        System.out.print("CONTENT: ");
         newsDTO.setContent(scanner.next());
         System.out.print("AUTHOR: ");
-        newsDTO.setAuthorId((long)scanner.nextInt());
+        newsDTO.setAuthorId(scanner.nextLong());
         System.out.print("ID FOR UPDATE: ");
         long id = scanner.nextLong();
 
-        newsService.update(newsDTO, id);
+        if (newsService.update(newsDTO, id) != null) System.out.println("UPDATE SUCCESS");
     }
 
     private void deleteNews() {
@@ -103,13 +103,14 @@ public class App implements GeneralApp{
     }
 
     private void viewAllNews() {
-        System.out.println(newsService.getAll());
+        if (newsService.getAll().isEmpty()) System.out.println("NO NEWS");
+        else System.out.println(newsService.getAll());
     }
 
     private void viewsNewsById() {
         System.out.print("ID: ");
         long id = scanner.nextLong();
 
-        System.out.println(newsService.getById(id));
+        if (newsService.getById(id) != null) System.out.println(newsService.getById(id));
     }
 }

@@ -61,8 +61,12 @@ public class DataSource {
             if (fis.available() > 0) {
                 ObjectInputStream ois = new ObjectInputStream(fis);
 
-                while (ois.available() > 0) {
-                    authorList.add((Author) ois.readObject());
+                while(true) {
+                    try {
+                        authorList.add((Author) ois.readObject());
+                    } catch (EOFException e) {
+                        break;
+                    }
                 }
                 ois.close();
             }

@@ -16,16 +16,22 @@ public class AuthorService implements GeneralService<AuthorDTO> {
     GeneralRepository<Author> repository = new AuthorRepository();
 
     @Override
-    public AuthorDTO create(AuthorDTO dto) throws MyException {
+    public AuthorDTO create(AuthorDTO dto) {
         GeneralValidation<AuthorDTO> validation = new ValidationAuthor();
-        validation.validate(dto);
-        Author author = new Author();
-        author.setName(dto.getName());
+        try {
+            validation.validate(dto);
+            Author author = new Author();
+            author.setName(dto.getName());
 
-        if (repository.getAll().isEmpty()) author.setId(1L);
-        else author.setId(repository.getAll().get(repository.getAll().size() - 1).getId() + 1);
+            if (repository.getAll().isEmpty()) author.setId(1L);
+            else author.setId(repository.getAll().get(repository.getAll().size() - 1).getId() + 1);
 
-        return AuthorMapper.INSTANCE.authorToAuthorDto(author);
+            repository.save(author);
+            return AuthorMapper.INSTANCE.authorToAuthorDto(author);
+        } catch (MyException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 
     @Override
@@ -34,18 +40,29 @@ public class AuthorService implements GeneralService<AuthorDTO> {
     }
 
     @Override
-    public AuthorDTO getById(Long id) throws MyException {
-        return AuthorMapper.INSTANCE.authorToAuthorDto(repository.getById(id));
+    public AuthorDTO getById(Long id) {
+        try {
+            return AuthorMapper.INSTANCE.authorToAuthorDto(repository.getById(id));
+        } catch (MyException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 
     @Override
-    public AuthorDTO update(AuthorDTO dto, Long id) throws MyException {
+    public AuthorDTO update(AuthorDTO dto, Long id) {
         GeneralValidation<AuthorDTO> validation = new ValidationAuthor();
-        validation.validate(dto);
-        Author author = new Author();
-        author.setName(dto.getName());
+        try {
+            validation.validate(dto);
 
-        return AuthorMapper.INSTANCE.authorToAuthorDto(repository.update(author, id));
+            Author author = new Author();
+            author.setName(dto.getName());
+
+            return AuthorMapper.INSTANCE.authorToAuthorDto(repository.update(author, id));
+        } catch (MyException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 
     @Override

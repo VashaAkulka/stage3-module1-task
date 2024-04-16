@@ -1,13 +1,15 @@
 package mapper;
 
 import dto.AuthorDTO;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.processing.Generated;
 import models.Author;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-04-16T14:58:49+0300",
-    comments = "version: 1.5.5.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-7.2.jar, environment: Java 11.0.20 (Oracle Corporation)"
+    date = "2024-04-16T18:47:31+0300",
+    comments = "version: 1.5.5.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-7.2.jar, environment: Java 17.0.10 (Amazon.com Inc.)"
 )
 public class AuthorMapperImpl implements AuthorMapper {
 
@@ -22,5 +24,19 @@ public class AuthorMapperImpl implements AuthorMapper {
         authorDTO.setName( author.getName() );
 
         return authorDTO;
+    }
+
+    @Override
+    public List<AuthorDTO> authorListToAuthorDtoList(List<Author> authorList) {
+        if ( authorList == null ) {
+            return null;
+        }
+
+        List<AuthorDTO> list = new ArrayList<AuthorDTO>( authorList.size() );
+        for ( Author author : authorList ) {
+            list.add( authorToAuthorDto( author ) );
+        }
+
+        return list;
     }
 }

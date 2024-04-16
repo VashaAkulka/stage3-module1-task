@@ -1,12 +1,13 @@
 package error;
 
 public enum ErrorCode {
-    NO_SUCH_NEW("101", "No such new"),
-    NO_SUCH_AUTHOR("102", "No such author"),
-    NO_SUCH_FILE("103", "No such file"),
-    EMPTY_FIELD("201", "empty field"),
-    FIELD_TITLE_INVALID_LENGTH("202", "invalid length title"),
-    FIELD_CONTENT_INVALID_LENGTH("203", "invalid length content");
+    NO_SUCH_NEW("101", "NO SUCH NEW"),
+    NO_SUCH_AUTHOR("102", "NO SUCH AUTHOR"),
+    NO_SUCH_FILE("103", "NO SUCH FILE"),
+    EMPTY_FIELD("201", "EMPTY FIELD"),
+    FIELD_TITLE_INVALID_LENGTH("202", "INVALID LENGTH TITLE"),
+    FIELD_CONTENT_INVALID_LENGTH("203", "INVALID LENGTH CONTENT"),
+    FIELD_NAME_INVALID_LENGTH("204", "INVALID LENGTH NAME");
 
 
     //100 - repository
