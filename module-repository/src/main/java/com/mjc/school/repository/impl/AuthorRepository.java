@@ -13,9 +13,10 @@ public class AuthorRepository implements GeneralRepository<AuthorModel> {
     private final DataSource dataSource = DataSource.getInstance();
 
     @Override
-    public void create(AuthorModel author) {
+    public AuthorModel create(AuthorModel author) {
         dataSource.getAuthorList().add(author);
         dataSource.writeAuthors();
+        return author;
     }
 
     @Override

@@ -12,9 +12,10 @@ public class NewsRepository implements GeneralRepository<NewsModel> {
     private final DataSource dataSource = DataSource.getInstance();
 
     @Override
-    public void create(NewsModel news) {
+    public NewsModel create(NewsModel news) {
         dataSource.getNewsList().add(news);
         dataSource.writeNews();
+        return news;
     }
 
     @Override
